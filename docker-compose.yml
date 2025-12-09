@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build: .
+    container_name: speakpace-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DEBUG=True
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+    volumes:
+      - ./:/app
+      - /tmp/speakpace:/tmp/speakpace
+    restart: unless-stopped
+    networks:
+      - speakpace-network
+
+  # Optional: PostgreSQL database
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: speakpace-db
+  #   environment:
+  #     POSTGRES_DB: speakpace
+  #     POSTGRES_USER: speakpace_user
+  #     POSTGRES_PASSWORD: your_secure_password
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - speakpace-network
+
+networks:
+  speakpace-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
